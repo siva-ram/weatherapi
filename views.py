@@ -83,7 +83,7 @@ class weatherApi2(Resource):
 
 
 class weatherApi3(Resource):
-    #forecast - calculation based on average temperatures of for the 
+    #forecast - calculation based on average temperatures of for the day in the previous years
     def get(self,date_value):
         mylist = []
         
