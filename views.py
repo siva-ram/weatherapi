@@ -33,9 +33,11 @@ def search_day(val,date_month,date_day):
     return dt.month==date_month and dt.day==date_day
 
 class weatherApi1(Resource):
+    #get all dates
     def get(self):
         return [{"DATE": str(element['dates'])} for element in db.all()]
-
+    
+    # create or update the data for a date
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('DATE')
@@ -55,6 +57,7 @@ class weatherApi1(Resource):
            
     
 class weatherApi2(Resource):
+    #get data for a particular date
     def get(self,date_value):
         #db = TinyDB('db2.json')
         
@@ -70,6 +73,7 @@ class weatherApi2(Resource):
         output["TMIN"]=  float("{0:.1f}".format(foundDate[0]['tmin']))
         return  output
     
+    #delete data for a date
     def delete(self, date_value):
         foundDate = db.search(temp['dates'] == date_value)
         if not foundDate:
@@ -79,6 +83,7 @@ class weatherApi2(Resource):
 
 
 class weatherApi3(Resource):
+    #forecast - calculation based on average temperatures of for the 
     def get(self,date_value):
         mylist = []
         
