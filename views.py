@@ -1,5 +1,4 @@
 from flask_restful import Resource, Api, abort, reqparse
-import os
 from tinydb import TinyDB, Query
 from flask import Flask, request
 import json
@@ -8,7 +7,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 api = Api(app)
-db = TinyDB('C:\\Users\\Siva\'s PC\\documents\\visual studio 2015\\Projects\\w2\\weatherapi\\weatherapi\\weatherapi\\db2.json')
+db = TinyDB('db2.json')
 temp=Query()
 
 
@@ -33,11 +32,8 @@ def search_day(val,date_month,date_day):
     dt = datetime.strptime(str(val), "%Y%m%d")
     return dt.month==date_month and dt.day==date_day
 
-class weatherApi(Resource):
+class weatherApi1(Resource):
     def get(self):
-        #with open('daily.json') as data_file:    
-        #    data = json.load(data_file)
-        #    db.insert_multiple(data)
         return [{"DATE": str(element['dates'])} for element in db.all()]
 
     def post(self):
@@ -56,8 +52,7 @@ class weatherApi(Resource):
                     db.insert({'dates': int(args['DATE']) , 'tmax': float(args['TMAX']), 'tmin': float(args['TMIN'])})     
                 return {'DATE': str(args['DATE'])}, 201
         return {"message" : "Bad request"}, 400 
-        #json_data = request.get_json(force=True)
-        
+           
     
 class weatherApi2(Resource):
     def get(self,date_value):
@@ -69,7 +64,6 @@ class weatherApi2(Resource):
         foundDate = db.search(temp['dates'] == date_value)
         if not foundDate:
            return {"message" : "Date not found"}, 404
-           #abort(404, message="Date {} doesn't exist".format(date_value))
         output =  {}
         output["DATE"]=  str(foundDate[0]['dates'])
         output["TMAX"]=  float("{0:.1f}".format(foundDate[0]['tmax']))
@@ -117,21 +111,14 @@ class weatherApi3(Resource):
                 output["TMAX"]=  float("{0:.1f}".format(temp_max))
                 output["TMIN"]=  float("{0:.1f}".format(temp_min))
                 mylist.append(output)
-            
+        else:
+            return {"message" : "Bad request"}, 400   
         return  mylist
 
 api.add_resource(weatherApi2,'/historical/<int:date_value>')
-api.add_resource(weatherApi, '/historical/')
+api.add_resource(weatherApi1, '/historical/')
 api.add_resource(weatherApi3,'/forecast/<int:date_value>')
 
-
-#if __name__ == '__main__':
-#    HOST = environ.get('SERVER_HOST', 'localhost')
-#    try:
-#        PORT = int(environ.get('SERVER_PORT', '5555'))
-#    except ValueError:
-#        PORT = 5555
-#    app.run(HOST, PORT)
 
 if __name__ == '__main__':
     app.run()
