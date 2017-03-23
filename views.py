@@ -4,10 +4,13 @@ from flask import Flask, request
 import json
 import random
 from datetime import datetime, timedelta
+from flask_restful.utils import cors
+import urllib2, urllib
 
 app = Flask(__name__)
 api = Api(app)
-db = TinyDB('db2.json')
+api.decorators=[cors.crossdomain(origin='*')]
+db = TinyDB('C:\\Users\\Siva\'s PC\\documents\\visual studio 2015\\Projects\\w2\\weatherapi\\weatherapi\\weatherapi\\db2.json')
 temp=Query()
 
 
@@ -120,9 +123,18 @@ class weatherApi3(Resource):
             return {"message" : "Bad request"}, 400   
         return  mylist
 
+
+class weatherApi4(Resource):
+    #forecast - using darksky service
+    def get(self,date_value):
+         url = "https://api.darksky.net/forecast/575b58915a86e7ddc1d8501d83a1b2c4/39.1031,-84.5120,"+str(date_value)+"?exclude=currently,flags,minutely,hourly,alerts"
+         result = json.loads(urllib2.urlopen(url).read())
+         return  result
+
 api.add_resource(weatherApi2,'/historical/<int:date_value>')
 api.add_resource(weatherApi1, '/historical/')
 api.add_resource(weatherApi3,'/forecast/<int:date_value>')
+api.add_resource(weatherApi4,'/darksky/<int:date_value>')
 
 
 if __name__ == '__main__':
