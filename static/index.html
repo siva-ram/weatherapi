@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" sclass="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="en" class="no-js">
+ <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My Weather Forecast App</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.js"></script>
+
+    <style>
+        .datepickerdemo .validation-messages {
+            font-size: 11px;
+            color: darkred;
+            margin: 10px 0 0 25px;
+        }
+
+        .axis--x path {
+            display: none;
+        }
+
+        .line {
+            fill: none;
+            stroke: steelblue;
+            stroke-width: 1.5px;
+        }
+
+        body {
+            background-color: #ECECEC;
+        }
+
+        .page-content {
+            background-color: #ECECEC;
+        }
+    </style>
+
+</head>
+<body ng-app="firstApplication">
+    <div class="datepickerdemo" ng-controller="dateController as ctrl">
+
+        <form name="myForm" ng-submit="submit()">
+            <md-content layout="row" layout-xs="column" layout-align="center center">
+                <h2>Pick a Day for Weather Forecast:</h2>
+            </md-content>
+            <md-content layout="row" layout-xs="column" layout-align="center center">
+
+                <div>
+                    <md-datepicker name="dateField"
+                                   ng-model="myDate"
+                                   md-placeholder="Enter date"
+                                   required></md-datepicker>
+                    <div class="validation-messages" ng-messages="myForm.dateField.$error">
+                        <div ng-message="valid">The entered value is not a date!</div>
+                        <div ng-message="required">This date is required!</div>
+                    </div>
+                </div>
+                <div>
+                    <md-button type="submit" class="md-padding md-raised md-primary submit" ng-disabled="myForm.$invalid">Submit</md-button>
+                </div>
+
+            </md-content>
+        </form>
+
+
+        <md-content layout="column" layout-xs="column" class="page-content" ng-show="displayChart">
+            <md-card flex="auto">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Forecast from Own Weather API:</span>
+
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <div class="area1">
+                        <svg class="svg1" width="960" height="500"></svg>
+                    </div>
+                </md-card-content>
+            </md-card>
+            <md-card flex="auto">
+                <md-card-title>
+                    <md-card-title-text>
+                        <span class="md-headline">Forecast from public darksky.net Weather API:</span>
+
+                    </md-card-title-text>
+                </md-card-title>
+                <md-card-content>
+                    <div class="area2">
+                        <svg class="svg2" width="960" height="500"></svg>
+                    </div>
+                </md-card-content>
+            </md-card>
+
+        </md-content>
+    </div>
+
+
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="/js/chart.js"></script>
+    <script src="/js/app.js"></script>
+
+</body>
+</html>

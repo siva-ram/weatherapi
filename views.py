@@ -1,6 +1,6 @@
 from flask_restful import Resource, Api, abort, reqparse
 from tinydb import TinyDB, Query
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 import json
 import random
 from datetime import datetime, timedelta
@@ -130,6 +130,14 @@ class weatherApi4(Resource):
          url = "https://api.darksky.net/forecast/575b58915a86e7ddc1d8501d83a1b2c4/39.1031,-84.5120,"+str(date_value)+"?exclude=currently,flags,minutely,hourly,alerts"
          result = json.loads(urllib2.urlopen(url).read())
          return  result
+
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory('static', path)
+
+@app.route("/")
+def static_index():
+    return send_from_directory('static', 'index.html')
 
 api.add_resource(weatherApi2,'/historical/<int:date_value>')
 api.add_resource(weatherApi1, '/historical/')
